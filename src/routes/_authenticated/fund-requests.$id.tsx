@@ -145,6 +145,22 @@ function FundRequestDetailPage() {
           <Info label="Disetujui" value={formatDate(request.approved_at)} />
           <Info label="Dicairkan" value={formatDate(request.disbursed_at)} />
           <Info label="LPJ Dikirim" value={formatDate(request.report_submitted_at)} />
+          <Info
+            label="Event Terkait"
+            value={
+              request.events ? (
+                <Link
+                  to="/events/$id"
+                  params={{ id: request.events.id }}
+                  className="text-primary hover:underline"
+                >
+                  {request.events.name}
+                </Link>
+              ) : (
+                "-"
+              )
+            }
+          />
           <Info label="Catatan" value={request.notes ?? "-"} />
         </div>
       </div>

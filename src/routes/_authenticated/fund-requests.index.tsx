@@ -128,7 +128,14 @@ function FundRequestsPage() {
                 }
               >
                 <TableCell className="font-medium">{r.request_number ?? "—"}</TableCell>
-                <TableCell className="max-w-[240px] truncate">{r.purpose}</TableCell>
+                <TableCell className="max-w-[240px]">
+                  <span className="block truncate">{r.purpose}</span>
+                  {r.events && (
+                    <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold text-secondary-foreground">
+                      🎯 {r.events.name}
+                    </span>
+                  )}
+                </TableCell>
                 <TableCell>{r.requester_division ?? "-"}</TableCell>
                 <TableCell className="text-right">{rupiah(r.amount_idr)}</TableCell>
                 <TableCell>
