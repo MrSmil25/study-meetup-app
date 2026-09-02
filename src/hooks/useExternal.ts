@@ -19,6 +19,7 @@ export type MouUpdate = T["mous"]["Update"];
 export type DealWithRelations = Deal & {
   companies: { name: string } | null;
   owner: { full_name: string } | null;
+  events: { id: string; name: string } | null;
 };
 export type MouWithCompany = Mou & { companies: { name: string } | null };
 
@@ -79,7 +80,9 @@ export function useDeals(companyId?: string) {
     queryFn: async (): Promise<DealWithRelations[]> => {
       let query = supabase
         .from("deals")
-        .select("*, companies(name), owner:profiles!deals_owner_person_id_fkey(full_name)")
+        .select(
+          "*, companies(name), owner:profiles!deals_owner_person_id_fkey(full_name), events(id, name)",
+        )
         .order("created_at", { ascending: false });
       if (companyId) query = query.eq("company_id", companyId);
       const { data, error } = await query;
