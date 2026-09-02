@@ -177,6 +177,11 @@ function CompanyDetailPage() {
                   <div className="mt-1 flex flex-wrap items-center gap-2">
                     <DealTypeBadge value={d.deal_type} />
                     <DealStageBadge value={d.stage} />
+                    {d.events && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold text-secondary-foreground">
+                        🎯 {d.events.name}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="text-right text-sm">
