@@ -35,6 +35,7 @@ import {
   useTransactions,
 } from "@/hooks/useFinance";
 import { useDivisions, useMyProfile } from "@/hooks/useProfile";
+import { useEvents } from "@/hooks/useEvents";
 import { formatDate, rupiah } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/transactions")({
@@ -59,6 +60,7 @@ function TransactionsPage() {
   const { data: profile } = useMyProfile();
   const { data: divisions = [] } = useDivisions();
   const { data: transactions = [], isLoading } = useTransactions();
+  const { data: events = [] } = useEvents();
 
   const defaults = monthRange();
   const [from, setFrom] = useState(defaults.from);
@@ -66,6 +68,7 @@ function TransactionsPage() {
   const [type, setType] = useState(NONE);
   const [category, setCategory] = useState(NONE);
   const [division, setDivision] = useState(NONE);
+  const [eventFilter, setEventFilter] = useState(NONE);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<TransactionWithRelations | null>(null);
   const [deleting, setDeleting] = useState<TransactionWithRelations | null>(null);
@@ -97,9 +100,10 @@ function TransactionsPage() {
         if (type !== NONE && t.type !== type) return false;
         if (category !== NONE && t.category !== category) return false;
         if (division !== NONE && transactionDivision(t) !== division) return false;
+        if (eventFilter !== NONE && t.related_event_id !== eventFilter) return false;
         return true;
       }),
-    [transactions, from, to, type, category, division],
+    [transactions, from, to, type, category, division, eventFilter],
   );
 
   const income = filtered
@@ -139,7 +143,7 @@ function TransactionsPage() {
         )}
       </div>
 
-      <div className="grid gap-3 rounded-2xl border bg-card p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-3 rounded-2xl border bg-card p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-6">
         <Field label="Dari">
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
         </Field>
@@ -168,6 +172,14 @@ function TransactionsPage() {
             onChange={setDivision}
             options={divisions.map((d) => ({ value: d.code, label: d.name }))}
             emptyLabel="Semua Divisi"
+          />
+        </Field>
+        <Field label="Event">
+          <EnumSelect
+            value={eventFilter}
+            onChange={setEventFilter}
+            options={events.map((e) => ({ value: e.id, label: e.name }))}
+            emptyLabel="Semua Event"
           />
         </Field>
       </div>
@@ -281,6 +293,15 @@ function TransactionsPage() {
                       className="text-xs font-medium text-primary underline-offset-2 hover:underline"
                     >
                       Lihat Pengajuan {t.fund_request.request_number ?? ""}
+                    </Link>
+                  )}
+                  {t.event && (
+                    <Link
+                      to="/events/$id"
+                      params={{ id: t.event.id }}
+                      className="text-xs font-medium text-primary underline-offset-2 hover:underline"
+                    >
+                      🎯 Terkait Event: {t.event.name}
                     </Link>
                   )}
                   {t.deal && (
