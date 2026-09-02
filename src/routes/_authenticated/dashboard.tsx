@@ -64,6 +64,20 @@ function DashboardPage() {
   const { data: deals = [], isLoading: dealsLoading } = useDeals();
   const { data: funds = [], isLoading: fundsLoading } = useFundRequests();
   const { data: transactions = [], isLoading: txLoading } = useTransactions();
+  const { data: events = [], isLoading: eventsLoading } = useEvents();
+
+  const eventAktif = events.filter((e) =>
+    ["Planning", "Preparation", "Live"].includes(e.status),
+  ).length;
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const nextEvent = events
+    .filter(
+      (e) =>
+        !["Done", "Cancelled"].includes(e.status) && !!e.date_start && e.date_start >= todayIso,
+    )
+    .sort((a, b) => (a.date_start ?? "").localeCompare(b.date_start ?? ""))[0];
+
+
 
   const totalAnggota = profiles.length;
   const anggotaAktif = profiles.filter((p) => p.status === "Active").length;
