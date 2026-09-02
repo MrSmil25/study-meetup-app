@@ -47,7 +47,7 @@ export function EnumSelect({
     typeof o === "string" ? { value: o, label: prettify(o) } : (o as { value: string; label: string }),
   );
   return (
-    <Select value={value || NONE} onValueChange={onChange} disabled={disabled}>
+    <Select value={value || NONE} onValueChange={onChange} disabled={disabled ?? false}>
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

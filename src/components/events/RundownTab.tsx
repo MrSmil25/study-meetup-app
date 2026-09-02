@@ -72,9 +72,9 @@ function RundownFormDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
   eventId: string;
-  eventDateStart?: string | null;
+  eventDateStart?: string | null | undefined;
   nextSortOrder: number;
-  item?: RundownWithPic | null;
+  item?: RundownWithPic | null | undefined;
 }) {
   const { data: profiles = [] } = useProfiles();
   const create = useCreateRundown();
@@ -197,8 +197,8 @@ export function RundownTab({
   canManage,
 }: {
   eventId: string;
-  eventDateStart?: string | null;
-  eventDateEnd?: string | null;
+  eventDateStart?: string | null | undefined;
+  eventDateEnd?: string | null | undefined;
   canManage: boolean;
 }) {
   const { data: items = [], isLoading } = useRundowns(eventId);
