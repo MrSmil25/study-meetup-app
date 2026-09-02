@@ -21,10 +21,13 @@ import { Route as AuthenticatedMembersRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedMousRouteImport } from './routes/_authenticated/mous'
 import { Route as AuthenticatedPipelineRouteImport } from './routes/_authenticated/pipeline'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedSpeakersRouteImport } from './routes/_authenticated/speakers'
 import { Route as AuthenticatedTransactionsRouteImport } from './routes/_authenticated/transactions'
 import { Route as AuthenticatedAdminCategoriesRouteImport } from './routes/_authenticated/admin.categories'
 import { Route as AuthenticatedCompaniesIndexRouteImport } from './routes/_authenticated/companies.index'
 import { Route as AuthenticatedCompaniesIdRouteImport } from './routes/_authenticated/companies.$id'
+import { Route as AuthenticatedEventsIndexRouteImport } from './routes/_authenticated/events.index'
+import { Route as AuthenticatedEventsIdRouteImport } from './routes/_authenticated/events.$id'
 import { Route as AuthenticatedFundRequestsIndexRouteImport } from './routes/_authenticated/fund-requests.index'
 import { Route as AuthenticatedFundRequestsIdRouteImport } from './routes/_authenticated/fund-requests.$id'
 
@@ -88,6 +91,11 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSpeakersRoute = AuthenticatedSpeakersRouteImport.update({
+  id: '/speakers',
+  path: '/speakers',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTransactionsRoute =
   AuthenticatedTransactionsRouteImport.update({
     id: '/transactions',
@@ -112,6 +120,17 @@ const AuthenticatedCompaniesIdRoute =
     path: '/companies/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedEventsIndexRoute =
+  AuthenticatedEventsIndexRouteImport.update({
+    id: '/events/',
+    path: '/events/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEventsIdRoute = AuthenticatedEventsIdRouteImport.update({
+  id: '/events/$id',
+  path: '/events/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedFundRequestsIndexRoute =
   AuthenticatedFundRequestsIndexRouteImport.update({
     id: '/fund-requests/',
@@ -137,11 +156,14 @@ export interface FileRoutesByFullPath {
   '/mous': typeof AuthenticatedMousRoute
   '/pipeline': typeof AuthenticatedPipelineRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/speakers': typeof AuthenticatedSpeakersRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
   '/companies/$id': typeof AuthenticatedCompaniesIdRoute
+  '/events/$id': typeof AuthenticatedEventsIdRoute
   '/fund-requests/$id': typeof AuthenticatedFundRequestsIdRoute
   '/companies/': typeof AuthenticatedCompaniesIndexRoute
+  '/events/': typeof AuthenticatedEventsIndexRoute
   '/fund-requests/': typeof AuthenticatedFundRequestsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -156,11 +178,14 @@ export interface FileRoutesByTo {
   '/mous': typeof AuthenticatedMousRoute
   '/pipeline': typeof AuthenticatedPipelineRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/speakers': typeof AuthenticatedSpeakersRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
   '/companies/$id': typeof AuthenticatedCompaniesIdRoute
+  '/events/$id': typeof AuthenticatedEventsIdRoute
   '/fund-requests/$id': typeof AuthenticatedFundRequestsIdRoute
   '/companies': typeof AuthenticatedCompaniesIndexRoute
+  '/events': typeof AuthenticatedEventsIndexRoute
   '/fund-requests': typeof AuthenticatedFundRequestsIndexRoute
 }
 export interface FileRoutesById {
@@ -177,11 +202,14 @@ export interface FileRoutesById {
   '/_authenticated/mous': typeof AuthenticatedMousRoute
   '/_authenticated/pipeline': typeof AuthenticatedPipelineRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/speakers': typeof AuthenticatedSpeakersRoute
   '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
   '/_authenticated/admin/categories': typeof AuthenticatedAdminCategoriesRoute
   '/_authenticated/companies/$id': typeof AuthenticatedCompaniesIdRoute
+  '/_authenticated/events/$id': typeof AuthenticatedEventsIdRoute
   '/_authenticated/fund-requests/$id': typeof AuthenticatedFundRequestsIdRoute
   '/_authenticated/companies/': typeof AuthenticatedCompaniesIndexRoute
+  '/_authenticated/events/': typeof AuthenticatedEventsIndexRoute
   '/_authenticated/fund-requests/': typeof AuthenticatedFundRequestsIndexRoute
 }
 export interface FileRouteTypes {
@@ -198,11 +226,14 @@ export interface FileRouteTypes {
     | '/mous'
     | '/pipeline'
     | '/profile'
+    | '/speakers'
     | '/transactions'
     | '/admin/categories'
     | '/companies/$id'
+    | '/events/$id'
     | '/fund-requests/$id'
     | '/companies/'
+    | '/events/'
     | '/fund-requests/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -217,11 +248,14 @@ export interface FileRouteTypes {
     | '/mous'
     | '/pipeline'
     | '/profile'
+    | '/speakers'
     | '/transactions'
     | '/admin/categories'
     | '/companies/$id'
+    | '/events/$id'
     | '/fund-requests/$id'
     | '/companies'
+    | '/events'
     | '/fund-requests'
   id:
     | '__root__'
@@ -237,11 +271,14 @@ export interface FileRouteTypes {
     | '/_authenticated/mous'
     | '/_authenticated/pipeline'
     | '/_authenticated/profile'
+    | '/_authenticated/speakers'
     | '/_authenticated/transactions'
     | '/_authenticated/admin/categories'
     | '/_authenticated/companies/$id'
+    | '/_authenticated/events/$id'
     | '/_authenticated/fund-requests/$id'
     | '/_authenticated/companies/'
+    | '/_authenticated/events/'
     | '/_authenticated/fund-requests/'
   fileRoutesById: FileRoutesById
 }
@@ -338,6 +375,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/speakers': {
+      id: '/_authenticated/speakers'
+      path: '/speakers'
+      fullPath: '/speakers'
+      preLoaderRoute: typeof AuthenticatedSpeakersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/transactions': {
       id: '/_authenticated/transactions'
       path: '/transactions'
@@ -366,6 +410,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCompaniesIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/events/': {
+      id: '/_authenticated/events/'
+      path: '/events'
+      fullPath: '/events/'
+      preLoaderRoute: typeof AuthenticatedEventsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/events/$id': {
+      id: '/_authenticated/events/$id'
+      path: '/events/$id'
+      fullPath: '/events/$id'
+      preLoaderRoute: typeof AuthenticatedEventsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/fund-requests/': {
       id: '/_authenticated/fund-requests/'
       path: '/fund-requests'
@@ -392,11 +450,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMousRoute: typeof AuthenticatedMousRoute
   AuthenticatedPipelineRoute: typeof AuthenticatedPipelineRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedSpeakersRoute: typeof AuthenticatedSpeakersRoute
   AuthenticatedTransactionsRoute: typeof AuthenticatedTransactionsRoute
   AuthenticatedAdminCategoriesRoute: typeof AuthenticatedAdminCategoriesRoute
   AuthenticatedCompaniesIdRoute: typeof AuthenticatedCompaniesIdRoute
+  AuthenticatedEventsIdRoute: typeof AuthenticatedEventsIdRoute
   AuthenticatedFundRequestsIdRoute: typeof AuthenticatedFundRequestsIdRoute
   AuthenticatedCompaniesIndexRoute: typeof AuthenticatedCompaniesIndexRoute
+  AuthenticatedEventsIndexRoute: typeof AuthenticatedEventsIndexRoute
   AuthenticatedFundRequestsIndexRoute: typeof AuthenticatedFundRequestsIndexRoute
 }
 
@@ -409,11 +470,14 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMousRoute: AuthenticatedMousRoute,
   AuthenticatedPipelineRoute: AuthenticatedPipelineRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedSpeakersRoute: AuthenticatedSpeakersRoute,
   AuthenticatedTransactionsRoute: AuthenticatedTransactionsRoute,
   AuthenticatedAdminCategoriesRoute: AuthenticatedAdminCategoriesRoute,
   AuthenticatedCompaniesIdRoute: AuthenticatedCompaniesIdRoute,
+  AuthenticatedEventsIdRoute: AuthenticatedEventsIdRoute,
   AuthenticatedFundRequestsIdRoute: AuthenticatedFundRequestsIdRoute,
   AuthenticatedCompaniesIndexRoute: AuthenticatedCompaniesIndexRoute,
+  AuthenticatedEventsIndexRoute: AuthenticatedEventsIndexRoute,
   AuthenticatedFundRequestsIndexRoute: AuthenticatedFundRequestsIndexRoute,
 }
 

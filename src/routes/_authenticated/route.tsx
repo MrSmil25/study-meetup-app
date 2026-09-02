@@ -16,6 +16,8 @@ import {
   Receipt,
   PiggyBank,
   Tags,
+  CalendarDays,
+  Mic,
 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -71,6 +73,13 @@ const navSections = [
         icon: Tags,
         financeAdminOnly: true,
       },
+    ],
+  },
+  {
+    section: "EVENT",
+    items: [
+      { to: "/events", label: "Events", icon: CalendarDays },
+      { to: "/speakers", label: "Speaker", icon: Mic },
     ],
   },
 ] as const;
