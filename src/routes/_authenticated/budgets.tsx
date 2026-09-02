@@ -11,6 +11,7 @@ import {
   canManageBudget,
   useBudgets,
   type Budget,
+  type BudgetWithEvent,
 } from "@/hooks/useFinance";
 import { useDivisions, useMyProfile } from "@/hooks/useProfile";
 import { rupiah } from "@/lib/format";
@@ -44,6 +45,7 @@ function BudgetsPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Budget | null>(null);
   const [detail, setDetail] = useState<Budget | null>(null);
+  const [scope, setScope] = useState(NONE);
 
   const periods = useMemo(
     () => Array.from(new Set(budgets.map((b) => b.period).filter(Boolean))).sort(),
@@ -54,6 +56,8 @@ function BudgetsPage() {
     if (period !== NONE && b.period !== period) return false;
     if (division !== NONE && (b.division ?? "") !== division) return false;
     if (status !== NONE && b.status !== status) return false;
+    if (scope === "division" && b.event_id) return false;
+    if (scope === "event" && !b.event_id) return false;
     return true;
   });
 
@@ -82,7 +86,7 @@ function BudgetsPage() {
         )}
       </div>
 
-      <div className="grid gap-3 rounded-2xl border bg-card p-4 shadow-sm sm:grid-cols-3">
+      <div className="grid gap-3 rounded-2xl border bg-card p-4 shadow-sm sm:grid-cols-4">
         <Field label="Period">
           <EnumSelect
             value={period}
@@ -107,6 +111,17 @@ function BudgetsPage() {
             emptyLabel="Semua Status"
           />
         </Field>
+        <Field label="Scope">
+          <EnumSelect
+            value={scope}
+            onChange={setScope}
+            options={[
+              { value: "division", label: "Per Divisi" },
+              { value: "event", label: "Per Event" },
+            ]}
+            emptyLabel="Semua Scope"
+          />
+        </Field>
       </div>
 
       {isLoading && (
@@ -121,7 +136,7 @@ function BudgetsPage() {
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {filtered.map((b) => {
+        {(filtered as BudgetWithEvent[]).map((b) => {
           const allocated = Number(b.allocated_idr ?? 0);
           const spent = Number(b.spent_idr ?? 0);
           const sisa = allocated - spent;
@@ -139,7 +154,8 @@ function BudgetsPage() {
                   style={color ? { backgroundColor: color } : undefined}
                 />
                 <p className="font-semibold">
-                  {b.division ?? "Umum Organisasi"} · {b.category}
+                  {b.events ? `🎯 ${b.events.name}` : (b.division ?? "Umum Organisasi")} ·{" "}
+                  {b.category}
                 </p>
               </div>
               <p className="text-xs text-muted-foreground">{b.period}</p>

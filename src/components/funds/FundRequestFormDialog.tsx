@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { EnumSelect, Field } from "@/components/external/form-fields";
+import { EnumSelect, Field, NONE } from "@/components/external/form-fields";
 import {
   FUND_URGENCIES,
   RupiahInput,
@@ -26,6 +26,7 @@ import {
   type FundRequest,
 } from "@/hooks/useFunds";
 import { useMyProfile } from "@/hooks/useProfile";
+import { eventOptionLabel, useActiveEvents } from "@/hooks/useEvents";
 import { rupiah } from "@/lib/format";
 
 export function FundRequestFormDialog({
@@ -40,11 +41,13 @@ export function FundRequestFormDialog({
   const { data: profile } = useMyProfile();
   const create = useCreateFundRequest();
   const update = useUpdateFundRequest();
+  const { data: events = [] } = useActiveEvents();
 
   const [purpose, setPurpose] = useState("");
   const [amount, setAmount] = useState(0);
   const [urgency, setUrgency] = useState("Normal");
   const [notes, setNotes] = useState("");
+  const [eventId, setEventId] = useState(NONE);
   const [rows, setRows] = useState<BreakdownRow[]>([]);
   const [busy, setBusy] = useState(false);
 
@@ -54,6 +57,7 @@ export function FundRequestFormDialog({
     setAmount(Number(request?.amount_idr ?? 0));
     setUrgency(request?.urgency ?? "Normal");
     setNotes(request?.notes ?? "");
+    setEventId(request?.event_id ?? NONE);
     setRows(parseBreakdown(request?.breakdown));
   }, [open, request]);
 
@@ -85,6 +89,7 @@ export function FundRequestFormDialog({
         urgency: urgency as FundRequest["urgency"],
         notes: notes.trim() === "" ? null : notes.trim(),
         breakdown: cleanRows,
+        event_id: eventId === NONE ? null : eventId,
         status: (mode === "draft" ? "Draft" : "Submitted") as FundRequest["status"],
       };
 
@@ -138,6 +143,15 @@ export function FundRequestFormDialog({
               <EnumSelect value={urgency} onChange={setUrgency} options={FUND_URGENCIES} />
             </Field>
           </div>
+
+          <Field label="Event Terkait">
+            <EnumSelect
+              value={eventId}
+              onChange={setEventId}
+              emptyLabel="Tanpa event"
+              options={events.map((e) => ({ value: e.id, label: eventOptionLabel(e) }))}
+            />
+          </Field>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">

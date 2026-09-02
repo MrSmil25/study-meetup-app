@@ -16,6 +16,7 @@ export type TransactionWithRelations = Transaction & {
     | { id: string; request_number: string | null; requester_division: string | null }
     | null;
   deal: { id: string; name: string; owner_division: string | null } | null;
+  event: { id: string; name: string } | null;
 };
 
 export const TRANSACTION_TYPES = ["Income", "Expense"] as const;
@@ -125,7 +126,7 @@ export function categoriesForType(
 }
 
 const TX_SELECT =
-  "*, recorder:profiles!fund_transactions_recorded_by_fkey(full_name), fund_request:fund_requests(id, request_number, requester_division), deal:deals(id, name, owner_division)";
+  "*, recorder:profiles!fund_transactions_recorded_by_fkey(full_name), fund_request:fund_requests(id, request_number, requester_division), deal:deals(id, name, owner_division), event:events(id, name)";
 
 export function transactionDivision(tx: TransactionWithRelations) {
   return tx.fund_request?.requester_division ?? tx.deal?.owner_division ?? null;
@@ -218,16 +219,18 @@ export function useDeleteTransaction() {
   });
 }
 
+export type BudgetWithEvent = Budget & { events: { id: string; name: string } | null };
+
 export function useBudgets() {
   return useQuery({
     queryKey: ["budgets"],
-    queryFn: async (): Promise<Budget[]> => {
+    queryFn: async (): Promise<BudgetWithEvent[]> => {
       const { data, error } = await supabase
         .from("budgets")
-        .select("*")
+        .select("*, events(id, name)")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as unknown as BudgetWithEvent[];
     },
   });
 }

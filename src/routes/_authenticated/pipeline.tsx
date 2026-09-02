@@ -69,6 +69,11 @@ function DealCard({ deal }: { deal: DealWithRelations }) {
           {initialsOf(deal.owner?.full_name)}
         </span>
       </div>
+      {deal.events && (
+        <span className="mt-2 inline-flex max-w-full items-center gap-1 truncate rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold text-secondary-foreground">
+          🎯 {deal.events.name}
+        </span>
+      )}
       <p className="mt-2 text-xs text-muted-foreground">Deadline: {formatDate(deal.deadline)}</p>
     </div>
   );

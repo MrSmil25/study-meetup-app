@@ -34,21 +34,24 @@ export function EnumSelect({
   options,
   placeholder = "Pilih…",
   emptyLabel,
+  disabled,
 }: {
   value: string;
   onChange: (value: string) => void;
   options: readonly { value: string; label: string }[] | readonly string[];
   placeholder?: string;
   emptyLabel?: string;
+  disabled?: boolean;
 }) {
   const items = (options as readonly unknown[]).map((o) =>
     typeof o === "string" ? { value: o, label: prettify(o) } : (o as { value: string; label: string }),
   );
   return (
-    <Select value={value || NONE} onValueChange={onChange}>
+    <Select value={value || NONE} onValueChange={onChange} disabled={disabled ?? false}>
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
+
       <SelectContent>
         {emptyLabel && <SelectItem value={NONE}>{emptyLabel}</SelectItem>}
         {items.map((item) => (

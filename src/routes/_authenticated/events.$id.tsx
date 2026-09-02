@@ -21,6 +21,7 @@ import {
   formatEventRange,
 } from "@/components/events/event-ui";
 import { EventFormDialog, EventSpeakerFormDialog } from "@/components/events/forms";
+import { RundownTab } from "@/components/events/RundownTab";
 import { DealStageBadge } from "@/components/external/badges";
 import {
   canManageEvents,
@@ -156,6 +157,7 @@ function EventDetailPage() {
           <TabsTrigger value="speakers">Speaker</TabsTrigger>
           <TabsTrigger value="sponsorship">Sponsorship</TabsTrigger>
           <TabsTrigger value="finance">Keuangan</TabsTrigger>
+          <TabsTrigger value="rundown">Rundown</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4 pt-4">
@@ -357,6 +359,14 @@ function EventDetailPage() {
               </TableBody>
             </Table>
           </div>
+        </TabsContent>
+        <TabsContent value="rundown" className="pt-4">
+          <RundownTab
+            eventId={id}
+            eventDateStart={event.date_start}
+            eventDateEnd={event.date_end}
+            canManage={canManage}
+          />
         </TabsContent>
       </Tabs>
 

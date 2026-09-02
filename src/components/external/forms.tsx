@@ -39,6 +39,7 @@ import {
   type Person,
 } from "@/hooks/useExternal";
 import { useDivisions, useProfiles } from "@/hooks/useProfile";
+import { eventOptionLabel, useEvents } from "@/hooks/useEvents";
 import { supabase } from "@/integrations/supabase/client";
 
 type DialogProps = { open: boolean; onOpenChange: (open: boolean) => void };
@@ -326,6 +327,7 @@ export function DealFormDialog({
   const { data: companies = [] } = useCompanies();
   const { data: divisions = [] } = useDivisions();
   const { data: profiles = [] } = useProfiles();
+  const { data: events = [] } = useEvents();
   const [form, setForm] = useState({
     name: "",
     deal_type: "Sponsorship",
@@ -334,6 +336,7 @@ export function DealFormDialog({
     owner_division: NONE,
     owner_person_id: NONE,
     stage: "Prospect",
+    event_id: NONE,
     value_idr: "",
     deliverables: "",
     deadline: "",
@@ -353,6 +356,7 @@ export function DealFormDialog({
       owner_division: deal?.owner_division ?? NONE,
       owner_person_id: deal?.owner_person_id ?? NONE,
       stage: deal?.stage ?? "Prospect",
+      event_id: deal?.event_id ?? NONE,
       value_idr: deal?.value_idr ? String(deal.value_idr) : "",
       deliverables: deal?.deliverables ?? "",
       deadline: deal?.deadline ?? "",
@@ -377,6 +381,7 @@ export function DealFormDialog({
       owner_division: orNull(form.owner_division),
       owner_person_id: orNull(form.owner_person_id),
       stage: form.stage as Deal["stage"],
+      event_id: orNull(form.event_id),
       value_idr: form.value_idr ? Number(form.value_idr) : 0,
       deliverables: orNull(form.deliverables),
       deadline: orNull(form.deadline),
@@ -453,6 +458,14 @@ export function DealFormDialog({
               onChange={(v) => setForm({ ...form, owner_person_id: v })}
               options={picOptions}
               emptyLabel="Tanpa PIC"
+            />
+          </Field>
+          <Field label="Event Terkait">
+            <EnumSelect
+              value={form.event_id}
+              onChange={(v) => setForm({ ...form, event_id: v })}
+              options={events.map((e) => ({ value: e.id, label: eventOptionLabel(e) }))}
+              emptyLabel="Tanpa event"
             />
           </Field>
           <Field label="Value (IDR)">

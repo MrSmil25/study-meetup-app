@@ -32,6 +32,7 @@ import {
 import { useFundRequests } from "@/hooks/useFunds";
 import { useDeals, uploadDocument } from "@/hooks/useExternal";
 import { useMyProfile } from "@/hooks/useProfile";
+import { eventOptionLabel, useActiveEvents } from "@/hooks/useEvents";
 import { rupiah } from "@/lib/format";
 
 function todayISO() {
@@ -50,7 +51,7 @@ function errorMessage(e: unknown) {
   return "Gagal menyimpan transaksi.";
 }
 
-type Relation = "request" | "deal" | "none";
+type Relation = "request" | "deal" | "event" | "none";
 
 export function TransactionFormDialog({
   open,
@@ -68,6 +69,7 @@ export function TransactionFormDialog({
   const { data: categories = [] } = useCategories();
   const { data: requests = [] } = useFundRequests();
   const { data: deals = [] } = useDeals();
+  const { data: events = [] } = useActiveEvents();
 
   const [date, setDate] = useState(todayISO());
   const [type, setType] = useState<"Income" | "Expense">("Expense");
@@ -77,6 +79,7 @@ export function TransactionFormDialog({
   const [relation, setRelation] = useState<Relation>("none");
   const [requestId, setRequestId] = useState(NONE);
   const [dealId, setDealId] = useState(NONE);
+  const [eventId, setEventId] = useState(NONE);
   const [visibility, setVisibility] = useState("Public_Org");
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
@@ -99,10 +102,13 @@ export function TransactionFormDialog({
           ? "request"
           : transaction.related_deal_id
             ? "deal"
-            : "none",
+            : transaction.related_event_id
+              ? "event"
+              : "none",
       );
       setRequestId(transaction.related_fund_request_id ?? NONE);
       setDealId(transaction.related_deal_id ?? NONE);
+      setEventId(transaction.related_event_id ?? NONE);
       setVisibility(transaction.visibility);
       setFile(null);
       return;
@@ -115,6 +121,7 @@ export function TransactionFormDialog({
     setRelation(eligibleRequests.length > 0 ? "request" : "none");
     setRequestId(NONE);
     setDealId(NONE);
+    setEventId(NONE);
     setVisibility("Public_Org");
     setFile(null);
   }, [open, transaction, eligibleRequests.length]);
@@ -152,6 +159,7 @@ export function TransactionFormDialog({
         related_fund_request_id:
           relation === "request" && requestId !== NONE ? requestId : null,
         related_deal_id: relation === "deal" && dealId !== NONE ? dealId : null,
+        related_event_id: relation === "event" && eventId !== NONE ? eventId : null,
         proof_url: proofPath,
         visibility: visibility as Transaction["visibility"],
         recorded_by: profile?.id ?? null,
@@ -245,6 +253,7 @@ export function TransactionFormDialog({
                 [
                   ["request", "Dari Pengajuan Dana yang Approved"],
                   ["deal", "Terkait Deal"],
+                  ["event", "Terkait Event"],
                   ["none", "Tidak Terkait / Umum"],
                 ] as [Relation, string][]
               ).map(([value, labelText]) => (
@@ -289,6 +298,17 @@ export function TransactionFormDialog({
                     d.value_idr,
                   )}${d.owner_division ? ` (Divisi ${d.owner_division})` : ""}`,
                 }))}
+              />
+            </Field>
+          )}
+
+          {relation === "event" && (
+            <Field label="Event">
+              <EnumSelect
+                value={eventId}
+                onChange={setEventId}
+                emptyLabel="Belum dipilih"
+                options={events.map((e) => ({ value: e.id, label: eventOptionLabel(e) }))}
               />
             </Field>
           )}

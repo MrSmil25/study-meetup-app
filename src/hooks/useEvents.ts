@@ -220,3 +220,92 @@ export function useDeleteEventSpeaker() {
     onSuccess: invalidate,
   });
 }
+
+/* -------------------------------- Rundown -------------------------------- */
+
+export type Rundown = T["event_rundowns"]["Row"];
+export type RundownInsert = T["event_rundowns"]["Insert"];
+export type RundownUpdate = T["event_rundowns"]["Update"];
+export type RundownWithPic = Rundown & {
+  pic: { full_name: string; division: string | null } | null;
+};
+
+/** Event yang masih berjalan (untuk dropdown di modul lain). */
+export function useActiveEvents() {
+  return useQuery({
+    queryKey: ["events", "active"],
+    queryFn: async (): Promise<Event[]> => {
+      const { data, error } = await supabase
+        .from("events")
+        .select("*")
+        .in("status", ["Planning", "Preparation", "Live"])
+        .order("date_start", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useRundowns(eventId: string) {
+  return useQuery({
+    queryKey: ["event-rundowns", eventId],
+    queryFn: async (): Promise<RundownWithPic[]> => {
+      const { data, error } = await supabase
+        .from("event_rundowns")
+        .select("*, pic:profiles!event_rundowns_pic_id_fkey(full_name, division)")
+        .eq("event_id", eventId);
+      if (error) throw error;
+      return ((data ?? []) as unknown as RundownWithPic[]).sort(
+        (a, b) =>
+          (a.sort_order ?? 0) - (b.sort_order ?? 0) ||
+          (a.time_start ?? "").localeCompare(b.time_start ?? ""),
+      );
+    },
+  });
+}
+
+function useInvalidateRundowns() {
+  const queryClient = useQueryClient();
+  return () => queryClient.invalidateQueries({ queryKey: ["event-rundowns"] });
+}
+
+export function useCreateRundown() {
+  const invalidate = useInvalidateRundowns();
+  return useMutation({
+    mutationFn: async (payload: RundownInsert) => {
+      const { error } = await supabase.from("event_rundowns").insert(payload);
+      if (error) throw error;
+    },
+    onSuccess: invalidate,
+  });
+}
+
+export function useUpdateRundown() {
+  const invalidate = useInvalidateRundowns();
+  return useMutation({
+    mutationFn: async ({ id, values }: { id: string; values: RundownUpdate }) => {
+      const { error } = await supabase.from("event_rundowns").update(values).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: invalidate,
+  });
+}
+
+export function useDeleteRundown() {
+  const invalidate = useInvalidateRundowns();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("event_rundowns").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: invalidate,
+  });
+}
+
+/** Label dropdown event: "Nama Event - 12 Sep 2026". */
+export function eventOptionLabel(e: { name: string; date_start?: string | null }) {
+  if (!e.date_start) return e.name;
+  const d = new Date(e.date_start);
+  if (Number.isNaN(d.getTime())) return e.name;
+  return `${e.name} - ${d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" })}`;
+}

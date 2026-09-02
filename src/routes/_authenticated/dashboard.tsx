@@ -18,7 +18,7 @@ import { useDeals } from "@/hooks/useExternal";
 import { isApprover, useFundRequests } from "@/hooks/useFunds";
 import { transactionDivision, useTransactions } from "@/hooks/useFinance";
 import { useEvents } from "@/hooks/useEvents";
-import { formatEventRange } from "@/components/events/event-ui";
+import { EventStatusBadge, formatEventRange } from "@/components/events/event-ui";
 import { rupiah } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -76,6 +76,13 @@ function DashboardPage() {
         !["Done", "Cancelled"].includes(e.status) && !!e.date_start && e.date_start >= todayIso,
     )
     .sort((a, b) => (a.date_start ?? "").localeCompare(b.date_start ?? ""))[0];
+
+  const myEvents = events
+    .filter(
+      (e) =>
+        e.pic_id === profile?.id && ["Planning", "Preparation", "Live"].includes(e.status),
+    )
+    .sort((a, b) => (a.date_start ?? "").localeCompare(b.date_start ?? ""));
 
 
 
@@ -203,6 +210,31 @@ function DashboardPage() {
         </div>
       </section>
 
+
+      {myEvents.length > 0 && (
+        <section className="rounded-2xl border bg-card p-6 shadow-sm">
+          <h2 className="text-lg font-semibold">Event yang Kamu PIC-in</h2>
+          <div className="mt-4 space-y-3">
+            {myEvents.map((e) => (
+              <Link
+                key={e.id}
+                to="/events/$id"
+                params={{ id: e.id }}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-4 transition-colors hover:bg-accent"
+              >
+                <div>
+                  <p className="font-semibold">{e.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {formatEventRange(e.date_start, e.date_end)}
+                    {e.venue ? ` · ${e.venue}` : ""}
+                  </p>
+                </div>
+                <EventStatusBadge value={e.status} />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {expenseByDivision.length > 0 && (
         <section className="rounded-2xl border bg-card p-6 shadow-sm">

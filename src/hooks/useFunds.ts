@@ -10,6 +10,7 @@ export type FundRequestUpdate = T["fund_requests"]["Update"];
 export type FundRequestWithPeople = FundRequest & {
   requester: { full_name: string; division: string | null } | null;
   approver: { full_name: string } | null;
+  events: { id: string; name: string } | null;
 };
 
 export type BreakdownRow = { item: string; qty: number; unit_price: number };
@@ -26,7 +27,7 @@ export function parseBreakdown(value: unknown): BreakdownRow[] {
 }
 
 const SELECT =
-  "*, requester:profiles!fund_requests_requester_id_fkey(full_name, division), approver:profiles!fund_requests_approver_id_fkey(full_name)";
+  "*, requester:profiles!fund_requests_requester_id_fkey(full_name, division), approver:profiles!fund_requests_approver_id_fkey(full_name), events(id, name)";
 
 function useInvalidateFunds() {
   const queryClient = useQueryClient();
