@@ -219,16 +219,18 @@ export function useDeleteTransaction() {
   });
 }
 
+export type BudgetWithEvent = Budget & { events: { id: string; name: string } | null };
+
 export function useBudgets() {
   return useQuery({
     queryKey: ["budgets"],
-    queryFn: async (): Promise<Budget[]> => {
+    queryFn: async (): Promise<BudgetWithEvent[]> => {
       const { data, error } = await supabase
         .from("budgets")
-        .select("*")
+        .select("*, events(id, name)")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as unknown as BudgetWithEvent[];
     },
   });
 }
