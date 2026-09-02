@@ -73,6 +73,13 @@ const navSections = [
       },
     ],
   },
+  {
+    section: "EVENT",
+    items: [
+      { to: "/events", label: "Events", icon: CalendarDays },
+      { to: "/speakers", label: "Speaker", icon: Mic },
+    ],
+  },
 ] as const;
 
 function AppLayout() {

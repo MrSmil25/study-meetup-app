@@ -27,6 +27,7 @@ import { Route as AuthenticatedAdminCategoriesRouteImport } from './routes/_auth
 import { Route as AuthenticatedCompaniesIndexRouteImport } from './routes/_authenticated/companies.index'
 import { Route as AuthenticatedCompaniesIdRouteImport } from './routes/_authenticated/companies.$id'
 import { Route as AuthenticatedEventsIndexRouteImport } from './routes/_authenticated/events.index'
+import { Route as AuthenticatedEventsIdRouteImport } from './routes/_authenticated/events.$id'
 import { Route as AuthenticatedFundRequestsIndexRouteImport } from './routes/_authenticated/fund-requests.index'
 import { Route as AuthenticatedFundRequestsIdRouteImport } from './routes/_authenticated/fund-requests.$id'
 
@@ -125,6 +126,11 @@ const AuthenticatedEventsIndexRoute =
     path: '/events/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedEventsIdRoute = AuthenticatedEventsIdRouteImport.update({
+  id: '/events/$id',
+  path: '/events/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedFundRequestsIndexRoute =
   AuthenticatedFundRequestsIndexRouteImport.update({
     id: '/fund-requests/',
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/transactions': typeof AuthenticatedTransactionsRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
   '/companies/$id': typeof AuthenticatedCompaniesIdRoute
+  '/events/$id': typeof AuthenticatedEventsIdRoute
   '/fund-requests/$id': typeof AuthenticatedFundRequestsIdRoute
   '/companies/': typeof AuthenticatedCompaniesIndexRoute
   '/events/': typeof AuthenticatedEventsIndexRoute
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/transactions': typeof AuthenticatedTransactionsRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
   '/companies/$id': typeof AuthenticatedCompaniesIdRoute
+  '/events/$id': typeof AuthenticatedEventsIdRoute
   '/fund-requests/$id': typeof AuthenticatedFundRequestsIdRoute
   '/companies': typeof AuthenticatedCompaniesIndexRoute
   '/events': typeof AuthenticatedEventsIndexRoute
@@ -198,6 +206,7 @@ export interface FileRoutesById {
   '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
   '/_authenticated/admin/categories': typeof AuthenticatedAdminCategoriesRoute
   '/_authenticated/companies/$id': typeof AuthenticatedCompaniesIdRoute
+  '/_authenticated/events/$id': typeof AuthenticatedEventsIdRoute
   '/_authenticated/fund-requests/$id': typeof AuthenticatedFundRequestsIdRoute
   '/_authenticated/companies/': typeof AuthenticatedCompaniesIndexRoute
   '/_authenticated/events/': typeof AuthenticatedEventsIndexRoute
@@ -221,6 +230,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/admin/categories'
     | '/companies/$id'
+    | '/events/$id'
     | '/fund-requests/$id'
     | '/companies/'
     | '/events/'
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/admin/categories'
     | '/companies/$id'
+    | '/events/$id'
     | '/fund-requests/$id'
     | '/companies'
     | '/events'
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '/_authenticated/transactions'
     | '/_authenticated/admin/categories'
     | '/_authenticated/companies/$id'
+    | '/_authenticated/events/$id'
     | '/_authenticated/fund-requests/$id'
     | '/_authenticated/companies/'
     | '/_authenticated/events/'
@@ -405,6 +417,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEventsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/events/$id': {
+      id: '/_authenticated/events/$id'
+      path: '/events/$id'
+      fullPath: '/events/$id'
+      preLoaderRoute: typeof AuthenticatedEventsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/fund-requests/': {
       id: '/_authenticated/fund-requests/'
       path: '/fund-requests'
@@ -435,6 +454,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedTransactionsRoute: typeof AuthenticatedTransactionsRoute
   AuthenticatedAdminCategoriesRoute: typeof AuthenticatedAdminCategoriesRoute
   AuthenticatedCompaniesIdRoute: typeof AuthenticatedCompaniesIdRoute
+  AuthenticatedEventsIdRoute: typeof AuthenticatedEventsIdRoute
   AuthenticatedFundRequestsIdRoute: typeof AuthenticatedFundRequestsIdRoute
   AuthenticatedCompaniesIndexRoute: typeof AuthenticatedCompaniesIndexRoute
   AuthenticatedEventsIndexRoute: typeof AuthenticatedEventsIndexRoute
@@ -454,6 +474,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTransactionsRoute: AuthenticatedTransactionsRoute,
   AuthenticatedAdminCategoriesRoute: AuthenticatedAdminCategoriesRoute,
   AuthenticatedCompaniesIdRoute: AuthenticatedCompaniesIdRoute,
+  AuthenticatedEventsIdRoute: AuthenticatedEventsIdRoute,
   AuthenticatedFundRequestsIdRoute: AuthenticatedFundRequestsIdRoute,
   AuthenticatedCompaniesIndexRoute: AuthenticatedCompaniesIndexRoute,
   AuthenticatedEventsIndexRoute: AuthenticatedEventsIndexRoute,
