@@ -16,6 +16,8 @@ import {
   Receipt,
   PiggyBank,
   Tags,
+  CalendarDays,
+  Mic,
 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Users,
   Boxes,
@@ -10,11 +10,15 @@ import {
   Receipt,
   PiggyBank,
   TrendingDown,
+  CalendarDays,
+  CalendarClock,
 } from "lucide-react";
 import { useDivisions, useMyProfile, useProfiles } from "@/hooks/useProfile";
 import { useDeals } from "@/hooks/useExternal";
 import { isApprover, useFundRequests } from "@/hooks/useFunds";
 import { transactionDivision, useTransactions } from "@/hooks/useFinance";
+import { useEvents } from "@/hooks/useEvents";
+import { formatEventRange } from "@/components/events/event-ui";
 import { rupiah } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
