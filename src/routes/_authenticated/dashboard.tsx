@@ -172,7 +172,37 @@ function DashboardPage() {
           icon={TrendingDown}
           valueClass="text-red-600"
         />
+        <StatCard
+          label="Event Aktif"
+          value={eventsLoading ? "…" : eventAktif}
+          icon={CalendarDays}
+        />
+        <div className="rounded-2xl border bg-card p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">Event Berikutnya</p>
+            <span className="flex size-9 items-center justify-center rounded-lg bg-secondary text-primary">
+              <CalendarClock className="size-4" />
+            </span>
+          </div>
+          {eventsLoading ? (
+            <p className="mt-3 text-3xl font-bold tracking-tight">…</p>
+          ) : nextEvent ? (
+            <Link
+              to="/events/$id"
+              params={{ id: nextEvent.id }}
+              className="mt-3 block hover:underline"
+            >
+              <p className="text-xl font-bold leading-tight">{nextEvent.name}</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {formatEventRange(nextEvent.date_start, nextEvent.date_end)}
+              </p>
+            </Link>
+          ) : (
+            <p className="mt-3 text-sm text-muted-foreground">Belum ada event terjadwal.</p>
+          )}
+        </div>
       </section>
+
 
       {expenseByDivision.length > 0 && (
         <section className="rounded-2xl border bg-card p-6 shadow-sm">
