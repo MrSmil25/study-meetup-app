@@ -98,7 +98,7 @@ export function SpeakerDetailDialog({
   );
 }
 
-function Row({ label, value }: { label: string; value?: string | null }) {
+function Row({ label, value }: { label: string; value?: string | null | undefined }) {
   return (
     <div>
       <dt className="text-xs font-medium text-muted-foreground">{label}</dt>

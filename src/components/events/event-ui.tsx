@@ -48,7 +48,7 @@ const FEE_CLASS: Record<string, string> = {
   Paid: "bg-green-100 text-green-700",
 };
 
-function Pill({ value, map }: { value?: string | null; map: Record<string, string> }) {
+function Pill({ value, map }: { value?: string | null | undefined; map: Record<string, string> }) {
   if (!value) return <span className="text-xs text-muted-foreground">-</span>;
   return <span className={cn(BASE, map[value] ?? "bg-muted text-foreground")}>{label(value)}</span>;
 }
@@ -102,10 +102,10 @@ export function BucketImage({
   fallback,
 }: {
   bucket: string;
-  path?: string | null;
+  path?: string | null | undefined;
   alt: string;
-  className?: string;
-  fallback?: string;
+  className?: string | undefined;
+  fallback?: string | undefined;
 }) {
   const [url, setUrl] = useState<string | null>(null);
 
