@@ -20,6 +20,7 @@ export type Database = {
           category: string
           created_at: string | null
           division: string | null
+          event_id: string | null
           id: string
           notes: string | null
           period: string
@@ -32,6 +33,7 @@ export type Database = {
           category: string
           created_at?: string | null
           division?: string | null
+          event_id?: string | null
           id?: string
           notes?: string | null
           period: string
@@ -44,6 +46,7 @@ export type Database = {
           category?: string
           created_at?: string | null
           division?: string | null
+          event_id?: string | null
           id?: string
           notes?: string | null
           period?: string
@@ -58,6 +61,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "divisions"
             referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "budgets_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -137,6 +147,7 @@ export type Database = {
           deadline: string | null
           deal_type: Database["public"]["Enums"]["deal_type"]
           deliverables: string | null
+          event_id: string | null
           id: string
           name: string
           notes: string | null
@@ -154,6 +165,7 @@ export type Database = {
           deadline?: string | null
           deal_type: Database["public"]["Enums"]["deal_type"]
           deliverables?: string | null
+          event_id?: string | null
           id?: string
           name: string
           notes?: string | null
@@ -171,6 +183,7 @@ export type Database = {
           deadline?: string | null
           deal_type?: Database["public"]["Enums"]["deal_type"]
           deliverables?: string | null
+          event_id?: string | null
           id?: string
           name?: string
           notes?: string | null
@@ -188,6 +201,13 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
@@ -237,6 +257,194 @@ export type Database = {
         }
         Relationships: []
       }
+      event_rundowns: {
+        Row: {
+          activity: string
+          created_at: string | null
+          event_id: string | null
+          id: string
+          notes: string | null
+          pic_id: string | null
+          sort_order: number | null
+          time_end: string | null
+          time_start: string | null
+        }
+        Insert: {
+          activity: string
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          notes?: string | null
+          pic_id?: string | null
+          sort_order?: number | null
+          time_end?: string | null
+          time_start?: string | null
+        }
+        Update: {
+          activity?: string
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          notes?: string | null
+          pic_id?: string | null
+          sort_order?: number | null
+          time_end?: string | null
+          time_start?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_rundowns_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_rundowns_pic_id_fkey"
+            columns: ["pic_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_speakers: {
+        Row: {
+          confirmation_status: Database["public"]["Enums"]["speaker_confirmation"]
+          created_at: string | null
+          event_id: string | null
+          fee_idr: number | null
+          fee_status: Database["public"]["Enums"]["fee_status"]
+          id: string
+          notes: string | null
+          session_time_end: string | null
+          session_time_start: string | null
+          session_title: string | null
+          speaker_id: string | null
+          tor_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          confirmation_status?: Database["public"]["Enums"]["speaker_confirmation"]
+          created_at?: string | null
+          event_id?: string | null
+          fee_idr?: number | null
+          fee_status?: Database["public"]["Enums"]["fee_status"]
+          id?: string
+          notes?: string | null
+          session_time_end?: string | null
+          session_time_start?: string | null
+          session_title?: string | null
+          speaker_id?: string | null
+          tor_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          confirmation_status?: Database["public"]["Enums"]["speaker_confirmation"]
+          created_at?: string | null
+          event_id?: string | null
+          fee_idr?: number | null
+          fee_status?: Database["public"]["Enums"]["fee_status"]
+          id?: string
+          notes?: string | null
+          session_time_end?: string | null
+          session_time_start?: string | null
+          session_title?: string | null
+          speaker_id?: string | null
+          tor_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_speakers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_speakers_speaker_id_fkey"
+            columns: ["speaker_id"]
+            isOneToOne: false
+            referencedRelation: "speakers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          actual_attendees: number | null
+          actual_spend_idr: number | null
+          budget_idr: number | null
+          created_at: string | null
+          date_end: string | null
+          date_start: string | null
+          description: string | null
+          event_type: Database["public"]["Enums"]["event_type"]
+          id: string
+          name: string
+          notes: string | null
+          pic_id: string | null
+          poster_url: string | null
+          slug: string | null
+          status: Database["public"]["Enums"]["event_status"]
+          target_attendees: number | null
+          updated_at: string | null
+          venue: string | null
+          venue_address: string | null
+        }
+        Insert: {
+          actual_attendees?: number | null
+          actual_spend_idr?: number | null
+          budget_idr?: number | null
+          created_at?: string | null
+          date_end?: string | null
+          date_start?: string | null
+          description?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"]
+          id?: string
+          name: string
+          notes?: string | null
+          pic_id?: string | null
+          poster_url?: string | null
+          slug?: string | null
+          status?: Database["public"]["Enums"]["event_status"]
+          target_attendees?: number | null
+          updated_at?: string | null
+          venue?: string | null
+          venue_address?: string | null
+        }
+        Update: {
+          actual_attendees?: number | null
+          actual_spend_idr?: number | null
+          budget_idr?: number | null
+          created_at?: string | null
+          date_end?: string | null
+          date_start?: string | null
+          description?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"]
+          id?: string
+          name?: string
+          notes?: string | null
+          pic_id?: string | null
+          poster_url?: string | null
+          slug?: string | null
+          status?: Database["public"]["Enums"]["event_status"]
+          target_attendees?: number | null
+          updated_at?: string | null
+          venue?: string | null
+          venue_address?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_pic_id_fkey"
+            columns: ["pic_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fund_requests: {
         Row: {
           amount_idr: number
@@ -247,6 +455,7 @@ export type Database = {
           created_at: string | null
           disbursed_at: string | null
           disbursement_proof_url: string | null
+          event_id: string | null
           id: string
           notes: string | null
           purpose: string
@@ -268,6 +477,7 @@ export type Database = {
           created_at?: string | null
           disbursed_at?: string | null
           disbursement_proof_url?: string | null
+          event_id?: string | null
           id?: string
           notes?: string | null
           purpose: string
@@ -289,6 +499,7 @@ export type Database = {
           created_at?: string | null
           disbursed_at?: string | null
           disbursement_proof_url?: string | null
+          event_id?: string | null
           id?: string
           notes?: string | null
           purpose?: string
@@ -307,6 +518,13 @@ export type Database = {
             columns: ["approver_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fund_requests_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
@@ -335,6 +553,7 @@ export type Database = {
           proof_url: string | null
           recorded_by: string | null
           related_deal_id: string | null
+          related_event_id: string | null
           related_fund_request_id: string | null
           transaction_date: string
           type: Database["public"]["Enums"]["transaction_type"]
@@ -349,6 +568,7 @@ export type Database = {
           proof_url?: string | null
           recorded_by?: string | null
           related_deal_id?: string | null
+          related_event_id?: string | null
           related_fund_request_id?: string | null
           transaction_date?: string
           type: Database["public"]["Enums"]["transaction_type"]
@@ -363,6 +583,7 @@ export type Database = {
           proof_url?: string | null
           recorded_by?: string | null
           related_deal_id?: string | null
+          related_event_id?: string | null
           related_fund_request_id?: string | null
           transaction_date?: string
           type?: Database["public"]["Enums"]["transaction_type"]
@@ -381,6 +602,13 @@ export type Database = {
             columns: ["related_deal_id"]
             isOneToOne: false
             referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fund_transactions_related_event_id_fkey"
+            columns: ["related_event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
@@ -659,6 +887,75 @@ export type Database = {
           },
         ]
       }
+      speakers: {
+        Row: {
+          bio_short: string | null
+          company_id: string | null
+          contact_person_id: string | null
+          created_at: string | null
+          cv_url: string | null
+          default_rate_idr: number | null
+          direct_email: string | null
+          direct_phone: string | null
+          expertise: string | null
+          full_name: string
+          id: string
+          notes: string | null
+          photo_url: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bio_short?: string | null
+          company_id?: string | null
+          contact_person_id?: string | null
+          created_at?: string | null
+          cv_url?: string | null
+          default_rate_idr?: number | null
+          direct_email?: string | null
+          direct_phone?: string | null
+          expertise?: string | null
+          full_name: string
+          id?: string
+          notes?: string | null
+          photo_url?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bio_short?: string | null
+          company_id?: string | null
+          contact_person_id?: string | null
+          created_at?: string | null
+          cv_url?: string | null
+          default_rate_idr?: number | null
+          direct_email?: string | null
+          direct_phone?: string | null
+          expertise?: string | null
+          full_name?: string
+          id?: string
+          notes?: string | null
+          photo_url?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "speakers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "speakers_contact_person_id_fkey"
+            columns: ["contact_person_id"]
+            isOneToOne: false
+            referencedRelation: "people"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transaction_categories: {
         Row: {
           color_hex: string | null
@@ -733,6 +1030,15 @@ export type Database = {
         | "Speaker"
         | "Institutional_MoU"
         | "In_kind"
+      event_status: "Planning" | "Preparation" | "Live" | "Done" | "Cancelled"
+      event_type:
+        | "Flagship"
+        | "Workshop"
+        | "Talkshow"
+        | "Internal"
+        | "Competition"
+        | "Other"
+      fee_status: "Not_Applicable" | "Pending" | "Paid"
       fund_status:
         | "Draft"
         | "Submitted"
@@ -757,6 +1063,7 @@ export type Database = {
         | "Custom"
       member_status: "Active" | "Alumni" | "Inactive"
       mou_status: "Draft" | "Under_Review" | "Signed" | "Expired" | "Terminated"
+      speaker_confirmation: "Invited" | "Confirmed" | "Declined" | "Cancelled"
       transaction_type: "Income" | "Expense"
       transaction_visibility:
         | "Public_Org"
@@ -923,6 +1230,16 @@ export const Constants = {
         "Institutional_MoU",
         "In_kind",
       ],
+      event_status: ["Planning", "Preparation", "Live", "Done", "Cancelled"],
+      event_type: [
+        "Flagship",
+        "Workshop",
+        "Talkshow",
+        "Internal",
+        "Competition",
+        "Other",
+      ],
+      fee_status: ["Not_Applicable", "Pending", "Paid"],
       fund_status: [
         "Draft",
         "Submitted",
@@ -950,6 +1267,7 @@ export const Constants = {
       ],
       member_status: ["Active", "Alumni", "Inactive"],
       mou_status: ["Draft", "Under_Review", "Signed", "Expired", "Terminated"],
+      speaker_confirmation: ["Invited", "Confirmed", "Declined", "Cancelled"],
       transaction_type: ["Income", "Expense"],
       transaction_visibility: [
         "Public_Org",
