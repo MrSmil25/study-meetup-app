@@ -620,6 +620,82 @@ export type Database = {
           },
         ]
       }
+      key_results: {
+        Row: {
+          baseline_value: number | null
+          created_at: string | null
+          current_value: number | null
+          due_date: string | null
+          id: string
+          metric_type: Database["public"]["Enums"]["metric_type"]
+          notes: string | null
+          objective_id: string | null
+          owner_division: string | null
+          owner_person_id: string | null
+          progress_percent: number | null
+          status: Database["public"]["Enums"]["okr_status"]
+          target_value: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          baseline_value?: number | null
+          created_at?: string | null
+          current_value?: number | null
+          due_date?: string | null
+          id?: string
+          metric_type?: Database["public"]["Enums"]["metric_type"]
+          notes?: string | null
+          objective_id?: string | null
+          owner_division?: string | null
+          owner_person_id?: string | null
+          progress_percent?: number | null
+          status?: Database["public"]["Enums"]["okr_status"]
+          target_value: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          baseline_value?: number | null
+          created_at?: string | null
+          current_value?: number | null
+          due_date?: string | null
+          id?: string
+          metric_type?: Database["public"]["Enums"]["metric_type"]
+          notes?: string | null
+          objective_id?: string | null
+          owner_division?: string | null
+          owner_person_id?: string | null
+          progress_percent?: number | null
+          status?: Database["public"]["Enums"]["okr_status"]
+          target_value?: number
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "key_results_objective_id_fkey"
+            columns: ["objective_id"]
+            isOneToOne: false
+            referencedRelation: "objectives"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "key_results_owner_division_fkey"
+            columns: ["owner_division"]
+            isOneToOne: false
+            referencedRelation: "divisions"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "key_results_owner_person_id_fkey"
+            columns: ["owner_person_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       letters: {
         Row: {
           approval_status: Database["public"]["Enums"]["letter_approval"]
@@ -769,6 +845,56 @@ export type Database = {
           {
             foreignKeyName: "mous_signatory_our_side_id_fkey"
             columns: ["signatory_our_side_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      objectives: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          notes: string | null
+          owner_id: string | null
+          period: Database["public"]["Enums"]["okr_period"]
+          priority: Database["public"]["Enums"]["priority_level"]
+          progress_percent: number | null
+          status: Database["public"]["Enums"]["okr_status"]
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string | null
+          period: Database["public"]["Enums"]["okr_period"]
+          priority?: Database["public"]["Enums"]["priority_level"]
+          progress_percent?: number | null
+          status?: Database["public"]["Enums"]["okr_status"]
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string | null
+          period?: Database["public"]["Enums"]["okr_period"]
+          priority?: Database["public"]["Enums"]["priority_level"]
+          progress_percent?: number | null
+          status?: Database["public"]["Enums"]["okr_status"]
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "objectives_owner_id_fkey"
+            columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -956,6 +1082,103 @@ export type Database = {
           },
         ]
       }
+      tasks: {
+        Row: {
+          assignee_id: string | null
+          completed_at: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          division: string | null
+          due_date: string | null
+          id: string
+          key_result_id: string | null
+          priority: Database["public"]["Enums"]["task_priority"]
+          related_deal_id: string | null
+          related_event_id: string | null
+          status: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          assignee_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          division?: string | null
+          due_date?: string | null
+          id?: string
+          key_result_id?: string | null
+          priority?: Database["public"]["Enums"]["task_priority"]
+          related_deal_id?: string | null
+          related_event_id?: string | null
+          status?: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          assignee_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          division?: string | null
+          due_date?: string | null
+          id?: string
+          key_result_id?: string | null
+          priority?: Database["public"]["Enums"]["task_priority"]
+          related_deal_id?: string | null
+          related_event_id?: string | null
+          status?: Database["public"]["Enums"]["task_status"]
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_division_fkey"
+            columns: ["division"]
+            isOneToOne: false
+            referencedRelation: "divisions"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "tasks_key_result_id_fkey"
+            columns: ["key_result_id"]
+            isOneToOne: false
+            referencedRelation: "key_results"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_related_deal_id_fkey"
+            columns: ["related_deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_related_event_id_fkey"
+            columns: ["related_event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transaction_categories: {
         Row: {
           color_hex: string | null
@@ -1062,8 +1285,27 @@ export type Database = {
         | "Internal_Task"
         | "Custom"
       member_status: "Active" | "Alumni" | "Inactive"
+      metric_type: "Number" | "Percentage" | "Currency_IDR" | "Boolean"
       mou_status: "Draft" | "Under_Review" | "Signed" | "Expired" | "Terminated"
+      okr_period:
+        | "Kepengurusan_2026"
+        | "Semester_1_2026"
+        | "Semester_2_2026"
+        | "Kuartal_1_2026"
+        | "Kuartal_2_2026"
+        | "Kuartal_3_2026"
+        | "Kuartal_4_2026"
+      okr_status:
+        | "Not_Started"
+        | "On_Track"
+        | "At_Risk"
+        | "Off_Track"
+        | "Achieved"
+        | "Cancelled"
+      priority_level: "P0" | "P1" | "P2"
       speaker_confirmation: "Invited" | "Confirmed" | "Declined" | "Cancelled"
+      task_priority: "Low" | "Medium" | "High" | "Critical"
+      task_status: "Todo" | "In_Progress" | "Blocked" | "Done" | "Cancelled"
       transaction_type: "Income" | "Expense"
       transaction_visibility:
         | "Public_Org"
@@ -1266,8 +1508,29 @@ export const Constants = {
         "Custom",
       ],
       member_status: ["Active", "Alumni", "Inactive"],
+      metric_type: ["Number", "Percentage", "Currency_IDR", "Boolean"],
       mou_status: ["Draft", "Under_Review", "Signed", "Expired", "Terminated"],
+      okr_period: [
+        "Kepengurusan_2026",
+        "Semester_1_2026",
+        "Semester_2_2026",
+        "Kuartal_1_2026",
+        "Kuartal_2_2026",
+        "Kuartal_3_2026",
+        "Kuartal_4_2026",
+      ],
+      okr_status: [
+        "Not_Started",
+        "On_Track",
+        "At_Risk",
+        "Off_Track",
+        "Achieved",
+        "Cancelled",
+      ],
+      priority_level: ["P0", "P1", "P2"],
       speaker_confirmation: ["Invited", "Confirmed", "Declined", "Cancelled"],
+      task_priority: ["Low", "Medium", "High", "Critical"],
+      task_status: ["Todo", "In_Progress", "Blocked", "Done", "Cancelled"],
       transaction_type: ["Income", "Expense"],
       transaction_visibility: [
         "Public_Org",
